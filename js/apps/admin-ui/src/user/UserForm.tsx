@@ -17,7 +17,7 @@ import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { HelpItem, UserProfileFields } from "ui-shared";
+import { HelpItem, TextControl, UserProfileFields } from "ui-shared";
 
 import { adminClient } from "../admin-client";
 import { useAlerts } from "../components/alert/Alerts";
@@ -74,6 +74,7 @@ export const UserForm = ({
     reset,
     formState: { errors },
   } = form;
+
   const watchUsernameInput = watch("username");
   const [selectedGroups, setSelectedGroups] = useState<GroupRepresentation[]>(
     [],
@@ -146,25 +147,21 @@ export const UserForm = ({
       )}
       {user?.id && (
         <>
-          <FormGroup label={t("id")} fieldId="kc-id" isRequired>
-            <KeycloakTextInput
-              id={user.id}
-              aria-label={t("userID")}
-              value={user.id}
-              type="text"
-              isReadOnly
-            />
-          </FormGroup>
-          <FormGroup label={t("createdAt")} fieldId="kc-created-at" isRequired>
-            <KeycloakTextInput
-              value={formatDate(new Date(user.createdTimestamp!))}
-              type="text"
-              id="kc-created-at"
-              aria-label={t("createdAt")}
-              name="createdTimestamp"
-              isReadOnly
-            />
-          </FormGroup>
+          <TextControl
+            name="id"
+            label={t("id")}
+            aria-label={t("userID")}
+            rules={{ required: { value: true, message: t("required") } }}
+            isDisabled
+          />
+          <TextControl
+            name="createdTimestamp"
+            label={t("createdAt")}
+            aria-label={t("createdAt")}
+            rules={{ required: { value: true, message: t("required") } }}
+            isDisabled
+            value={formatDate(new Date(user.createdTimestamp!))}
+          />
         </>
       )}
       <RequiredActionMultiSelect
@@ -229,6 +226,17 @@ export const UserForm = ({
       ) : (
         <>
           {!realm.registrationEmailAsUsername && (
+            // <TextControl
+            //   name="username"
+            //   label={t("username")}
+            //   rules={{ required: { value: true, message: t("required") } }}
+            //   isDisabled={
+            //     !!user?.id &&
+            //     !realm.editUsernameAllowed &&
+            //     realm.editUsernameAllowed !== undefined
+            //   }
+            //   {...register("username")}
+            // />
             <FormGroup
               label={t("username")}
               fieldId="kc-username"

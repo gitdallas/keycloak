@@ -26,7 +26,7 @@ export const TextControl = <
 >(
   props: TextControlProps<T, P>,
 ) => {
-  const { labelIcon, ...rest } = props;
+  const { labelIcon, value, ...rest } = props;
   const required = !!props.rules?.required;
   const defaultValue = props.defaultValue ?? ("" as PathValue<T, P>);
 
@@ -53,6 +53,7 @@ export const TextControl = <
         isDisabled={props.isDisabled}
         {...rest}
         {...field}
+        {...(value ? { value } : {})}
       />
     </FormLabel>
   );
